@@ -2,8 +2,10 @@ const connection = require('../db/connection');
 const topicData = require('../db/data/test-data/topics');
 
 const selectTopics = () => {
-    console.log(topicData);
-    return Promise.resolve(topicData)
+    return connection.query(`SELECT * FROM topics`)
+                    .then((topics) => {
+                        return topics.rows
+                    })
 };
 
 module.exports = { selectTopics }
