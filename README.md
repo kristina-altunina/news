@@ -13,9 +13,13 @@ To connect to the databases locally, you will need to set up the environment var
 
 1. Create two .env files: .env.test and .env.development in the root of the project directory.
 
-2. Into each file, add PGDATABASE=, with the correct database name for that environment (see /db/setup.sql for the database names). 
-eg. PGDATABASE=database_name
-eg. PGDATABASE=database_name_test
+2. Into each file, add PGDATABASE=, with the correct database name for that environment:
+
+In .env.development file add: 
+PGDATABASE=nc_news
+
+In .env.test file add:
+PGDATABASE=nc_news_test
 
 3. Double check that these .env files are .gitignored.
 
