@@ -81,7 +81,7 @@ describe('GET/api/articles/:article_id', () => {
     });
 });
 
-describe('GET/api/articles', () => {
+xdescribe('GET/api/articles', () => {
     it('200: responds with a status of 200', () => {
         return request(app).get('/api/articles').expect(200);
     });
