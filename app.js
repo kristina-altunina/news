@@ -1,10 +1,8 @@
 const express = require('express');
-const { getAllTopics, getTopicBySlug } = require('./controllers/topics-controller');
+const { getAllTopics } = require('./controllers/topics-controller');
 const app = express();
 
-app.use('/api/topics/:slug', getTopicBySlug);
 app.use('/api/topics', getAllTopics);
-
 
 app.use((err, request, response, next) => {
   

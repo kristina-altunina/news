@@ -29,32 +29,4 @@ describe('GET/api/topics', () => {
         });
         });
     });
-
-    it('200: responds with a single topic with slug', () => {
-        return request(app)
-        .get('/api/topics/cats')
-        .then((response) => {    
-            expect(response.body).toHaveLength(1);
-            const topic = response.body[0];
-            expect(topic.slug).toBe('cats')
-        });
-    });
-
-    it('400: responds with an error message if not a valid slug', () => {
-        return request(app).
-        get('/api/topics/1')
-        .then((response) => {
-            const {message} = response.body;
-            expect(message).toBe('400: Bad Request')
-        });
-    });
-
-    it('404: responds with an error message if the topic is doesn\'t exist', () => {
-        return request(app).
-        get('/api/topics/abc')
-        .then((response) => {
-            const {message} = response.body;
-            expect(message).toBe('404: Not Found')
-        });
-    });
 });

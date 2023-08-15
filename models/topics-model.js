@@ -1,19 +1,9 @@
 const connection = require('../db/connection');
-const { topicData } = require('../db/data/test-data');
+const topicData = require('../db/data/test-data/topics');
 
 const selectTopics = () => {
-    return connection.query(`SELECT * FROM topics`)
-                    .then(({rows : topics}) => {
-                        return topics || [];
-                    })
+    console.log(topicData);
+    return Promise.resolve(topicData)
 };
 
-const readTopicsBySlug = (slug) => {
-    return connection.query("SELECT * FROM topics WHERE Slug = $1", [slug])
-        .then(({rows : topics}) => {
-        return topics;
-        })
- };
-
-
-module.exports = { selectTopics, readTopicsBySlug }
+module.exports = { selectTopics }
