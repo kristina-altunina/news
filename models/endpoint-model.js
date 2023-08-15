@@ -1,7 +1,10 @@
-const endpointsFile = require('../endpoints.json');
+const fs = require('fs');
 
 const endpointData = () => { 
-    return Promise.resolve(endpointsFile)
+    return fs.promises.readFile('endpoints.json', 'utf8') 
 };
 
 module.exports = { endpointData };
+
+
+
