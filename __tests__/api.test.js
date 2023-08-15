@@ -30,3 +30,10 @@ describe('GET/api/topics', () => {
         });
     });
 });
+
+
+describe('GET/api', () => {
+    it('200: responds with all endpoints available', () => {
+        return request(app).get('/api').expect(200);
+    });
+});
