@@ -1,8 +1,11 @@
 const express = require('express');
 const { getAllTopics } = require('./controllers/topics-controller');
+const { availableEndpoints } = require('./controllers/endpoint-controller');
 const app = express();
 
+
 app.use('/api/topics', getAllTopics);
+app.use('/api', availableEndpoints);
 
 app.use((err, request, response, next) => {
   
