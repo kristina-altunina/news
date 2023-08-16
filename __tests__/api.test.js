@@ -13,6 +13,7 @@ beforeEach(() => {
     return seed(testData);
 });
 
+
 describe('GET/api/topics', () => {
     it('200: responds with a status of 200', () => {
         return request(app).get('/api/topics').expect(200);
@@ -36,19 +37,27 @@ describe('GET/api/topics', () => {
 describe('GET/api', () => {
     it('200: responds with all endpoints available', () => {
         return request(app).get('/api').expect(200);
+    })   
+
+    it('200: responds with the expected JSON describing all available endpoints', () => {
+        return request(app).get('/api')
+        .then((response) => {
+        expect(response.body['GET /api'].description).toBe('serves up a json representation of all the available endpoints of the api');
+        expect(response.body['GET /api/topics'].description).toBe('serves an array of all topics');
+        expect(response.body['GET /api/articles'].description).toBe('serves an array of all articles');
         })   
     });
-
+});
 
 describe('GET/api/articles/:article_id', () => {
     it('200: responds with an article object', () => {
         return request(app).get('/api/articles/1').expect(200);
-        });   
+    });   
 
     it('200: responds with an article object with id of 1', () => {
         return request(app).get('/api/articles/1')
         .then((response) => {
-            const article = response.body.article;
+            const article = response.body.article
             expect(article).toHaveProperty('author', expect.any(String));
             expect(article).toHaveProperty('title', expect.any(String));
             expect(article).toHaveProperty('article_id', expect.any(Number));
@@ -60,7 +69,7 @@ describe('GET/api/articles/:article_id', () => {
         })
     });
 
-    it('400: responds with an error message when passed an article_id that is not accepted ', () => {
+    it('400: responds with an error message when passed an article_id that is not accepted', () => {
         return request(app).get('/api/articles/hello')
         .then((result) => {
             const {body} = result
