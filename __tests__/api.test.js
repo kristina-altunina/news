@@ -97,3 +97,45 @@ describe('GET/api/articles/:article_id', () => {
         })
     });
 });
+
+describe('GET/api/articles/:article_id/comments', () => {
+    it('200: responds with status 200', () => {
+        return request(app).get('/api/articles/1/comments').expect(200);
+    });   
+
+    it('200: returns an array of comments for an article with id of 1', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .then((response) => {
+        const body = response.body
+        const comment = body.comments[0]
+        expect(comment).toHaveProperty('comment_id', expect.any(Number));
+        expect(comment).toHaveProperty('votes', expect.any(Number));
+        expect(comment).toHaveProperty('created_at', expect.any(String));
+        expect(comment).toHaveProperty('author', expect.any(String));
+        expect(comment).toHaveProperty('body', expect.any(String));
+        expect(comment).toHaveProperty('article_id', expect.any(Number));
+    });
+    });
+
+    it('400: responds with an error message when passed an invalid article_id', () => {
+        return request(app).get('/api/articles/hhhhh/comments')
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+
+    it('404: responds with an error message when passed an article_id that does not exist', () => {
+        return request(app).get('/api/articles/1000/comments')
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
+        })
+    });
+});

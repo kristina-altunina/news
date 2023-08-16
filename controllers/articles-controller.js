@@ -7,11 +7,9 @@ const getArticle = (request, response, next) => {
          response.status(200).send({article}); 
         })
         .catch((err) => {
-            if (err.code === '22P02') {
-              err = {status: 400}  
-            }
             next(err);
-    });
-};
+        });
+    };
+    
 
 module.exports = { getArticle };
