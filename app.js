@@ -1,10 +1,11 @@
 const express = require('express');
 const { getAllTopics } = require('./controllers/topics-controller');
 const { availableEndpoints } = require('./controllers/endpoint-controller');
-const { getArticle } = require('./controllers/articles-controller');
+const { getArticle, getArticles } = require('./controllers/articles-controller');
 const app = express();
 
 app.use('/api/articles/:article_id', getArticle);
+app.use('/api/articles', getArticles);
 app.use('/api/topics', getAllTopics);
 app.use('/api', availableEndpoints);
 

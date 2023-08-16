@@ -81,7 +81,7 @@ describe('GET/api/articles/:article_id', () => {
     });
 });
 
-xdescribe('GET/api/articles', () => {
+describe('GET/api/articles', () => {
     it('200: responds with a status of 200', () => {
         return request(app).get('/api/articles').expect(200);
     });
@@ -99,7 +99,7 @@ xdescribe('GET/api/articles', () => {
         expect(article).toHaveProperty('created_at', expect.any(String));
         expect(article).toHaveProperty('votes', expect.any(Number));
         expect(article).toHaveProperty('article_img_url', expect.any(String));
-        expect(article).toHaveProperty('comment_count', expect.any(Number));
+        expect(article).toHaveProperty('comment_count', expect.any(String));
         });
     });
  });

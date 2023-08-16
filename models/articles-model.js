@@ -1,6 +1,4 @@
 const connection = require('../db/connection');
-const topicData = require('../db/data/test-data/articles');
-
 
 const selectArticle = (article_id) => {
 
@@ -17,4 +15,30 @@ const selectArticle = (article_id) => {
         })
 };
 
-module.exports = { selectArticle }
+const selectArticles = () => {
+    return connection.query(`SELECT articles.author, 
+                            articles.title, 
+                            articles.article_id, 
+                            articles.topic, 
+                            articles.created_at, 
+                            articles.votes, 
+                            articles.article_img_url,
+                            COUNT(*) AS comment_count
+                            FROM articles
+                            LEFT JOIN comments
+                            ON articles.article_id = comments.article_id
+                            GROUP BY articles.author, 
+                            articles.title, 
+                            articles.article_id, 
+                            articles.topic, 
+                            articles.created_at, 
+                            articles.votes, 
+                            articles.article_img_url
+                            ORDER BY articles.created_at DESC;`
+                            )
+        .then((articles) => {
+            return articles.rows    
+        })
+};
+
+module.exports = { selectArticle, selectArticles }
