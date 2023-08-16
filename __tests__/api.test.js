@@ -4,7 +4,6 @@ const connection = require('../db/connection');
 const { seed } = require('../db/seeds/seed');
 const testData = require('../db/data/test-data/index');
 
-
 afterAll(() => {
     return connection.end();
 });
@@ -38,6 +37,15 @@ describe('GET/api', () => {
         return request(app).get('/api')
         .then((response) => {
         expect(response.status).toBe(200);
+        })   
+    });
+
+    it('200: responds with the expected JSON describing all available endpoints', () => {
+        return request(app).get('/api')
+        .then((response) => {
+        expect(response.body['GET /api'].description).toBe('serves up a json representation of all the available endpoints of the api');
+        expect(response.body['GET /api/topics'].description).toBe('serves an array of all topics');
+        expect(response.body['GET /api/articles'].description).toBe('serves an array of all articles');
         })   
     });
 });
