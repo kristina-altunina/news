@@ -50,7 +50,7 @@ describe('GET/api', () => {
 });
 
 describe('GET/api/articles/:article_id', () => {
-    it('200: responds with an article object', () => {
+    it('200: responds with status 200', () => {
         return request(app).get('/api/articles/1').expect(200);
     });   
 
@@ -58,19 +58,20 @@ describe('GET/api/articles/:article_id', () => {
         return request(app).get('/api/articles/1')
         .then((response) => {
             const article = response.body.article
-            expect(article).toHaveProperty('author', expect.any(String));
-            expect(article).toHaveProperty('title', expect.any(String));
-            expect(article).toHaveProperty('article_id', expect.any(Number));
-            expect(article).toHaveProperty('body', expect.any(String));
-            expect(article).toHaveProperty('topic', expect.any(String));
-            expect(article).toHaveProperty('created_at', expect.any(String));
-            expect(article).toHaveProperty('votes', expect.any(Number));
-            expect(article).toHaveProperty('article_img_url', expect.any(String));
+            expect(article.author).toBe("butter_bridge");
+            expect(article.title).toBe("Living in the shadow of a great man");
+            expect(article.article_id).toBe(1);
+            expect(article.body).toBe("I find this existence challenging");
+            expect(article.topic).toBe("mitch");
+            expect(article.created_at).toBe("2020-07-09T20:11:00.000Z");
+            expect(article.votes).toBe(100);
+            expect(article.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700");
         })
     });
 
     it('400: responds with an error message when passed an article_id that is not accepted', () => {
         return request(app).get('/api/articles/hello')
+        .expect(400)
         .then((result) => {
             const {body} = result
             expect(result.status).toBe(400)
