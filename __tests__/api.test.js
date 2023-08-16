@@ -13,6 +13,7 @@ beforeEach(() => {
     return seed(testData);
 });
 
+
 describe('GET/api/topics', () => {
     it('200: responds with a status of 200', () => {
         return request(app).get('/api/topics').expect(200);
@@ -48,27 +49,27 @@ describe('GET/api', () => {
 
 
 describe('GET/api/articles/:article_id', () => {
-    it('200: responds with an article object', () => {
+    it('200: responds with status 200', () => {
         return request(app).get('/api/articles/1').expect(200);
-        });   
+    });   
 
     it('200: responds with an article object with id of 1', () => {
         return request(app).get('/api/articles/1')
         .then((response) => {
-            const article = response.body.article;
-            expect(article).toHaveProperty('author', expect.any(String));
-            expect(article).toHaveProperty('title', expect.any(String));
-            expect(article).toHaveProperty('article_id', expect.any(Number));
-            expect(article).toHaveProperty('body', expect.any(String));
-            expect(article).toHaveProperty('topic', expect.any(String));
-            expect(article).toHaveProperty('created_at', expect.any(String));
-            expect(article).toHaveProperty('votes', expect.any(Number));
-            expect(article).toHaveProperty('article_img_url', expect.any(String));
+            const article = response.body.article
+            expect(article.author).toBe("butter_bridge");
+            expect(article.title).toBe("Living in the shadow of a great man");
+            expect(article.body).toBe("I find this existence challenging");
+            expect(article.topic).toBe("mitch");
+            expect(article.created_at).toBe("2020-07-09T20:11:00.000Z");
+            expect(article.votes).toBe(100);
+            expect(article.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700");
         })
     });
 
-    it('400: responds with an error message when passed an article_id that is not accepted ', () => {
+    it('400: responds with an error message when passed an article_id that is invalid', () => {
         return request(app).get('/api/articles/hello')
+        .expect(400)
         .then((result) => {
             const {body} = result
             expect(result.status).toBe(400)
@@ -86,9 +87,10 @@ describe('GET/api/articles/:article_id', () => {
             expect(body.message).toBe('404: Not Found')
         })
     });
-});
+ });
 
-describe('GET/api/articles', () => {
+
+ describe('GET/api/articles', () => {
     it('200: responds with a status of 200', () => {
         return request(app).get('/api/articles').expect(200);
     });
@@ -107,6 +109,8 @@ describe('GET/api/articles', () => {
         expect(article).toHaveProperty('votes', expect.any(Number));
         expect(article).toHaveProperty('article_img_url', expect.any(String));
         expect(article).toHaveProperty('comment_count', expect.any(String));
-        });
+        expect(article).not.toHaveProperty('body');
     });
- });
+});
+});
+
