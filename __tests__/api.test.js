@@ -109,14 +109,24 @@ describe('GET/api/articles/:article_id/comments', () => {
         .then((response) => {
         const body = response.body
         const comment = body.comments[0]
-        expect(comment).toHaveProperty('comment_id', expect.any(Number));
-        expect(comment).toHaveProperty('votes', expect.any(Number));
-        expect(comment).toHaveProperty('created_at', expect.any(String));
-        expect(comment).toHaveProperty('author', expect.any(String));
-        expect(comment).toHaveProperty('body', expect.any(String));
-        expect(comment).toHaveProperty('article_id', expect.any(Number));
+        expect(comment.comment_id).toBe(5);
+        expect(comment.votes).toBe(0);
+        expect(comment.created_at).toBe('2020-11-03T21:00:00.000Z');
+        expect(comment.author).toBe('icellusedkars');
+        expect(comment.body).toBe('I hate streaming noses');
+        expect(comment.article_id).toBe(1);
     });
     });
+
+    it('200: returns an empty array of comments for a valid article', () => {
+        return request(app)
+        .get('/api/articles/4/comments')
+        .then((response) => {
+        const body = response.body
+        expect(body.comments).toEqual([])
+    });
+    });
+
 
     it('400: responds with an error message when passed an invalid article_id', () => {
         return request(app).get('/api/articles/hhhhh/comments')
