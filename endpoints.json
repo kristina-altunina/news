@@ -66,6 +66,25 @@
           "created_at": "'2020-10-31T03:03:00.000Z'"
         }
       ]
+  },
+
+  "PATCH /api/articles/:article_id": {
+    "description": "updates votes in the article with the article_id",
+    "queries": [],
+    "exampleResponse": {
+      "article": 
+        {
+          "author": "weegembump",
+          "title": "Seafood substitutions are increasing",
+          "article_id":1,
+          "topic": "cooking",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "body": "Text from the article..",
+          "votes": 3,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+        }
+    },
+    "expampleRequest": { "inc_votes": 5 }
   }
 }
 }

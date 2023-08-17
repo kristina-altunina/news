@@ -1,13 +1,15 @@
 const express = require('express');
 const { getAllTopics } = require('./controllers/topics-controller');
 const { availableEndpoints } = require('./controllers/endpoint-controller');
-const { getArticle, getArticles } = require('./controllers/articles-controller');
+const { getArticle, getArticles, patchArticle } = require('./controllers/articles-controller');
 const { getAllComments } = require('./controllers/comments-controller');
 const { handle400s } = require('./controllers/error-controller')
 const app = express();
+app.use(express.json());
 
-app.use('/api/articles/:article_id/comments', getAllComments);
-app.use('/api/articles/:article_id', getArticle);
+app.patch('/api/articles/:article_id', patchArticle);
+app.get('/api/articles/:article_id/comments', getAllComments);
+app.get('/api/articles/:article_id', getArticle);
 app.use('/api/articles', getArticles);
 app.use('/api/topics', getAllTopics);
 app.use('/api', availableEndpoints);

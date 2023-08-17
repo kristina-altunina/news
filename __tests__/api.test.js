@@ -167,3 +167,46 @@ describe('GET/api/articles/:article_id/comments', () => {
         })
     });
 });
+
+describe('PATCH /api/articles/:article_id', () => {
+    it('200: responds with the updated article', () => {
+        const newVote = { inc_votes: 5 };
+
+        return request(app).patch('/api/articles/1').send(newVote)
+        
+        .then((response) => {
+        const {article} = response.body
+            expect(article).toHaveProperty("title");
+            expect(article).toHaveProperty("topic");
+            expect(article).toHaveProperty("body");
+            expect(article).toHaveProperty("created_at");
+            expect(article).toHaveProperty("votes");
+            expect(article).toHaveProperty("article_img_url");
+        })
+    });
+
+    it('400: responds with an error message when passed an invalid vote', () => {
+        const invalidVote = { inc_votes: "h" }
+
+        return request(app).patch('/api/articles/1').send(invalidVote)
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('404: responds with an error message when passed an article that does not exist', () => {
+        const newVote = { inc_votes: 5 };
+        
+        return request(app).patch('/api/articles/1000').send(newVote)
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
+        })
+    });
+});
+

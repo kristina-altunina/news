@@ -1,4 +1,4 @@
-const { selectArticle, selectArticles } = require('../models/articles-model');
+const { selectArticle, selectArticles, updateArticle } = require('../models/articles-model');
 
 const getArticle = (request, response, next) => {
     const {article_id} = request.params;
@@ -23,4 +23,21 @@ const getArticles = (request, response, next) => {
 };
 
 
-module.exports = { getArticle, getArticles };
+const patchArticle = (request, response, next) => {
+    const {article_id} = request.params;
+    const {inc_votes} = request.body;
+    selectArticle(article_id).then((article) => {
+        updateArticle(article.article_id, inc_votes).then((updatedArticle) => {
+            response.status(201).send({article: updatedArticle})
+        })
+        .catch((err) => {
+            next(err);
+        })
+    })
+    .catch((err) => {
+        next(err);
+    });
+}
+
+
+module.exports = { getArticle, getArticles, patchArticle };
