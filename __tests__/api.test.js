@@ -97,3 +97,57 @@ describe('GET/api/articles/:article_id', () => {
         })
     });
 });
+
+
+describe('POST /api/articles/:article_id/comments', () => {
+    it('201: responds with a status of 201', () => {
+        const newComment = {
+            username: "kristina",
+            body: "I love coffee"
+        };
+
+        return request(app).post('/api/articles/:article_id/comments').send(newComment)
+        .expect(201);
+    });
+    
+    it('201: responds with a comment object that has been sent', () => {
+        const newComment = {
+            username: "kristina",
+            body: "I love coffee"
+        };
+
+        return request(app).post('/api/articles/:article_id/comments').send(newComment)
+        .expect(201)
+        .then((response) => {
+            const {comment} = response.body;
+            expect(comment).toEqual(newComment)
+        })
+    });
+
+    it('400: responds with an error message if username or body is missing', () => {
+        const invalidComment = {
+            username: "kristina"
+        };
+        
+        return request(app).post('/api/articles/:article_id/comments').send(invalidComment)
+        .expect(400)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('400: Bad Request')
+        })
+    });
+
+    it('400: responds with an error message if username or body is empty', () => {
+        const invalidComment = {
+            username: "",
+            body: "I love coffee"
+        };
+        
+        return request(app).post('/api/articles/:article_id/comments').send(invalidComment)
+        .expect(400)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('400: Bad Request')
+        })
+    });
+});
