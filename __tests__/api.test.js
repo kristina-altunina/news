@@ -59,6 +59,7 @@ describe('GET/api/articles/:article_id', () => {
             const article = response.body.article
             expect(article.author).toBe("butter_bridge");
             expect(article.title).toBe("Living in the shadow of a great man");
+            expect(article.article_id).toBe(1);
             expect(article.body).toBe("I find this existence challenging");
             expect(article.topic).toBe("mitch");
             expect(article.created_at).toBe("2020-07-09T20:11:00.000Z");
