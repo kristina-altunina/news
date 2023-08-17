@@ -37,24 +37,16 @@ describe('GET/api/topics', () => {
 describe('GET/api', () => {
     it('200: responds with all endpoints available', () => {
         return request(app).get('/api').expect(200);
-    })   
-
-    it('200: responds with the expected JSON describing all available endpoints', () => {
-        return request(app).get('/api')
-        .then((response) => {
-        expect(response.body['GET /api'].description).toBe('serves up a json representation of all the available endpoints of the api');
-        expect(response.body['GET /api/topics'].description).toBe('serves an array of all topics');
-        expect(response.body['GET /api/articles'].description).toBe('serves an array of all articles');
-        })   
-    });
+        })
 
     it('200: responds with the expected JSON describing all available endpoints', () => {
         return request(app).get('/api')
         .then((response) => {
         expect(response.body).toEqual(expectedEndpoints);
         })   
-    });
+    });   
 });
+
 
 describe('GET/api/articles/:article_id', () => {
     it('200: responds with status 200', () => {
@@ -76,7 +68,7 @@ describe('GET/api/articles/:article_id', () => {
         })
     });
 
-    it('400: responds with an error message when passed an article_id that is not accepted', () => {
+    it('400: responds with an error message when passed an article_id that is invalid', () => {
         return request(app).get('/api/articles/hello')
         .expect(400)
         .then((result) => {
@@ -96,7 +88,33 @@ describe('GET/api/articles/:article_id', () => {
             expect(body.message).toBe('404: Not Found')
         })
     });
+ });
+
+
+ describe('GET/api/articles', () => {
+    it('200: responds with a status of 200', () => {
+        return request(app).get('/api/articles').expect(200);
+    });
+
+    it('200: returns an array of article objects', () => {
+        return request(app)
+        .get('/api/articles')
+        .then((response) => {
+        const body = response.body
+        const article = body.articles[0]
+        expect(article).toHaveProperty('author', expect.any(String));
+        expect(article).toHaveProperty('title', expect.any(String));
+        expect(article).toHaveProperty('article_id', expect.any(Number));
+        expect(article).toHaveProperty('topic', expect.any(String));
+        expect(article).toHaveProperty('created_at', expect.any(String));
+        expect(article).toHaveProperty('votes', expect.any(Number));
+        expect(article).toHaveProperty('article_img_url', expect.any(String));
+        expect(article).toHaveProperty('comment_count', expect.any(String));
+        expect(article).not.toHaveProperty('body');
+    });
 });
+});
+
 
 describe('GET/api/articles/:article_id/comments', () => {
     it('200: responds with status 200', () => {
