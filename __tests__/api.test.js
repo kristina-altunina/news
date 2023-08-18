@@ -168,6 +168,178 @@ describe('GET/api/articles/:article_id/comments', () => {
     });
 });
 
+
+describe('POST /api/articles/:article_id/comments', () => {
+    it('201: responds with a status of 201', () => {
+        const newComment = {
+            username: "butter_bridge",
+            body: "Hello"
+        };
+
+        return request(app).post('/api/articles/4/comments').send(newComment)
+        .expect(201);
+    });
+    
+    it('201: responds with a comment object that has been sent', () => {
+        const newComment = {
+            username: "butter_bridge",
+            body: "Hello",
+            someProperty: "someValue"
+        };
+
+        return request(app).post('/api/articles/4/comments').send(newComment)
+        .expect(201)
+        .then((response) => {
+            const {comment} = response.body;
+            expect(comment.author).toEqual(newComment.username);
+            expect(comment.body).toEqual(newComment.body);
+            expect(comment.votes).toEqual(0);
+            expect(comment.created_at).not.toBe("");
+            expect(comment.comment_id).not.toBe(0);
+        })
+    });
+
+    it('400: responds with an error message if username or body is missing', () => {
+        const invalidComment = {
+            username: "butter_bridge"
+        };
+        
+        return request(app).post('/api/articles/4/comments').send(invalidComment)
+        .expect(400)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('400: Bad Request')
+        })
+    });
+
+    it('400: responds with an error message if username is empty', () => {
+        const invalidComment = {
+            username: "",
+            body: "Hello"
+        };
+        
+        return request(app).post('/api/articles/4/comments').send(invalidComment)
+        .expect(400)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('400: Bad Request')
+        })
+    });
+
+    it('400: responds with an error message when adding a comment into an invalid article', () => {
+        const newComment = {
+            username: "butter_bridge",
+            body: "Hello"
+        };
+        
+        return request(app).post('/api/articles/hhhh/comments').send(newComment)
+        .expect(400)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('400: Bad Request')
+        })
+    });
+
+    it('404: responds with an error message when adding a comment into an article that does not exist', () => {
+        const newComment = {
+            username: "butter_bridge",
+            body: "Hello"
+        };
+        
+        return request(app).post('/api/articles/1000/comments').send(newComment)
+        .expect(404)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('404: Not Found')
+        })
+    });
+
+    it('404: responds with an error message if username doesn\'t exist', () => {
+        const newComment = {
+            username: "kristina",
+            body: "Hello"
+        };
+        
+        return request(app).post('/api/articles/4/comments').send(newComment)
+        .expect(404)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('404: Not Found')
+        })
+    });
+});
+
+describe('PATCH /api/articles/:article_id', () => {
+    it('200: responds with the updated article', () => {
+        const newVote = { inc_votes: 5 };
+
+        return request(app).patch('/api/articles/1').send(newVote)
+        
+        .then((response) => {
+        const {article} = response.body
+            expect(article).toHaveProperty("title", "Living in the shadow of a great man");
+            expect(article).toHaveProperty("topic", "mitch");
+            expect(article).toHaveProperty("body", "I find this existence challenging");
+            expect(article).toHaveProperty("created_at", "2020-07-09T20:11:00.000Z");
+            expect(article).toHaveProperty("votes", 105);
+            expect(article).toHaveProperty("article_img_url", "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",);
+        })
+    });
+
+    it('200: responds with the updated article when passing a decremented vote', () => {
+        const newVote = { inc_votes: -1 };
+
+        return request(app).patch('/api/articles/1').send(newVote)
+        
+        .then((response) => {
+        const {article} = response.body
+            expect(article).toHaveProperty("title", "Living in the shadow of a great man");
+            expect(article).toHaveProperty("topic", "mitch");
+            expect(article).toHaveProperty("body", "I find this existence challenging");
+            expect(article).toHaveProperty("created_at", "2020-07-09T20:11:00.000Z");
+            expect(article).toHaveProperty("votes", 99);
+            expect(article).toHaveProperty("article_img_url", "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",);
+        })
+    });
+
+    it('400: responds with an error message when passed an invalid vote', () => {
+        const invalidVote = { inc_votes: "h" }
+
+        return request(app).patch('/api/articles/1').send(invalidVote)
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('400: responds with an error message when passed an invalid article_id', () => {
+        const newVote = { inc_votes: 5 }
+
+        return request(app).patch('/api/articles/hhhhh').send(newVote)
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('404: responds with an error message when passed an article that does not exist', () => {
+        const newVote = { inc_votes: 5 };
+        
+        return request(app).patch('/api/articles/1000').send(newVote)
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
+        })
+    });
+});
+
+
 describe('DELETE /api/comments/:comment_id', () => {
     it('204: responds with status 204 and no content', () => {
         return request(app).delete('/api/comments/1').expect(204)

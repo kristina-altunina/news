@@ -9,6 +9,18 @@ const selectComments = (article_id) => {
                             })
 };
 
+const insertComment = (article_id, newComment) => {
+    const {username, body} = newComment;
+    
+    return connection.query(`INSERT INTO comments (body, author, article_id) 
+    VALUES ($1, $2, $3) RETURNING *;`,
+    [body, username, article_id])
+    .then(({rows}) => {
+        return rows[0];
+    })
+}
+
+
 const selectCommentToDelete = (comment_id) => {
     return connection.query(`DELETE FROM comments
                             WHERE comment_id = $1 RETURNING *`, [comment_id])
@@ -17,6 +29,6 @@ const selectCommentToDelete = (comment_id) => {
                             })
 }
 
-module.exports = { selectComments, selectCommentToDelete }
+module.exports = { selectComments, insertComment, selectCommentToDelete }
 
 
