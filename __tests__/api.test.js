@@ -192,6 +192,9 @@ describe('POST /api/articles/:article_id/comments', () => {
             const {comment} = response.body;
             expect(comment.author).toEqual(newComment.username);
             expect(comment.body).toEqual(newComment.body);
+            expect(comment.votes).toEqual(0);
+            expect(comment.created_at).not.toBe("");
+            expect(comment.comment_id).not.toBe(0);
         })
     });
 
@@ -208,7 +211,7 @@ describe('POST /api/articles/:article_id/comments', () => {
         })
     });
 
-    it('400: responds with an error message if username or body is empty', () => {
+    it('400: responds with an error message if username is empty', () => {
         const invalidComment = {
             username: "",
             body: "Hello"
