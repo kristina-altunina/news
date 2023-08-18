@@ -268,3 +268,74 @@ describe('POST /api/articles/:article_id/comments', () => {
         })
     });
 });
+
+describe('PATCH /api/articles/:article_id', () => {
+    it('200: responds with the updated article', () => {
+        const newVote = { inc_votes: 5 };
+
+        return request(app).patch('/api/articles/1').send(newVote)
+        
+        .then((response) => {
+        const {article} = response.body
+            expect(article).toHaveProperty("title", "Living in the shadow of a great man");
+            expect(article).toHaveProperty("topic", "mitch");
+            expect(article).toHaveProperty("body", "I find this existence challenging");
+            expect(article).toHaveProperty("created_at", "2020-07-09T20:11:00.000Z");
+            expect(article).toHaveProperty("votes", 105);
+            expect(article).toHaveProperty("article_img_url", "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",);
+        })
+    });
+
+    it('200: responds with the updated article when passing a decremented vote', () => {
+        const newVote = { inc_votes: -1 };
+
+        return request(app).patch('/api/articles/1').send(newVote)
+        
+        .then((response) => {
+        const {article} = response.body
+            expect(article).toHaveProperty("title", "Living in the shadow of a great man");
+            expect(article).toHaveProperty("topic", "mitch");
+            expect(article).toHaveProperty("body", "I find this existence challenging");
+            expect(article).toHaveProperty("created_at", "2020-07-09T20:11:00.000Z");
+            expect(article).toHaveProperty("votes", 99);
+            expect(article).toHaveProperty("article_img_url", "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",);
+        })
+    });
+
+    it('400: responds with an error message when passed an invalid vote', () => {
+        const invalidVote = { inc_votes: "h" }
+
+        return request(app).patch('/api/articles/1').send(invalidVote)
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('400: responds with an error message when passed an invalid article_id', () => {
+        const newVote = { inc_votes: 5 }
+
+        return request(app).patch('/api/articles/hhhhh').send(newVote)
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('404: responds with an error message when passed an article that does not exist', () => {
+        const newVote = { inc_votes: 5 };
+        
+        return request(app).patch('/api/articles/1000').send(newVote)
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
+        })
+    });
+});
+
