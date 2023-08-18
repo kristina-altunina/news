@@ -1,4 +1,4 @@
-const { selectComments } = require('../models/comments-model');
+const { selectComments, selectCommentToDelete } = require('../models/comments-model');
 const { selectArticle } = require('../models/articles-model');
 
 const getAllComments = (request, response, next) => {
@@ -13,5 +13,14 @@ const getAllComments = (request, response, next) => {
     });
 };
 
+const deleteComment = (request, response, next) => {
+    const {comment_id} = request.params
+    selectCommentToDelete(comment_id).then(() => {
+        response.status(204).send();  
+    })
+    .catch((err) => {
+        next(err);
+    });
+};
 
-module.exports = { getAllComments };
+module.exports = { getAllComments, deleteComment };

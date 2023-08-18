@@ -9,6 +9,14 @@ const selectComments = (article_id) => {
                             })
 };
 
-module.exports = { selectComments }
+const selectCommentToDelete = (comment_id) => {
+    return connection.query(`DELETE FROM comments
+                            WHERE comment_id = $1 RETURNING *`, [comment_id])
+                            .then(({rows}) => {
+                                return rows[0]  
+                            })
+}
+
+module.exports = { selectComments, selectCommentToDelete }
 
 
