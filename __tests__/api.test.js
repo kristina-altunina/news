@@ -183,7 +183,8 @@ describe('POST /api/articles/:article_id/comments', () => {
     it('201: responds with a comment object that has been sent', () => {
         const newComment = {
             username: "butter_bridge",
-            body: "Hello"
+            body: "Hello",
+            someProperty: "someValue"
         };
 
         return request(app).post('/api/articles/4/comments').send(newComment)
@@ -246,6 +247,20 @@ describe('POST /api/articles/:article_id/comments', () => {
         };
         
         return request(app).post('/api/articles/1000/comments').send(newComment)
+        .expect(404)
+        .then((response) => {
+            const {message} = response.body;
+            expect(message).toBe('404: Not Found')
+        })
+    });
+
+    it('404: responds with an error message if username doesn\'t exist', () => {
+        const newComment = {
+            username: "kristina",
+            body: "Hello"
+        };
+        
+        return request(app).post('/api/articles/4/comments').send(newComment)
         .expect(404)
         .then((response) => {
             const {message} = response.body;
