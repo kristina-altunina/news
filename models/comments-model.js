@@ -9,6 +9,14 @@ const selectComments = (article_id) => {
                             })
 };
 
+const selectComment = (comment_id) => {
+    return connection.query(`SELECT * FROM comments
+                            WHERE comment_id = $1`, [comment_id])
+                            .then((rows) => {
+                                return rows[0];
+                            })
+}
+
 const insertComment = (article_id, newComment) => {
     const {username, body} = newComment;
     
@@ -24,11 +32,14 @@ const insertComment = (article_id, newComment) => {
 const selectCommentToDelete = (comment_id) => {
     return connection.query(`DELETE FROM comments
                             WHERE comment_id = $1 RETURNING *`, [comment_id])
-                            .then(({rows}) => {
-                                return rows[0]  
+                            .then((response) => {
+                                if(response.rowCount === 0) {
+                                    return Promise.reject({status: 404})
+                                }
+                                return response.rows[0]
                             })
 }
 
-module.exports = { selectComments, insertComment, selectCommentToDelete }
+module.exports = { selectComments, selectComment, insertComment, selectCommentToDelete }
 
 

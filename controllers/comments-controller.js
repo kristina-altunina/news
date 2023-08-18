@@ -1,4 +1,4 @@
-const { selectComments, insertComment, selectCommentToDelete } = require('../models/comments-model');
+const { selectComments, selectComment, insertComment, selectCommentToDelete } = require('../models/comments-model');
 const { selectArticle } = require('../models/articles-model');
 const { selectUser } = require('../models/users-model');
 
@@ -13,6 +13,7 @@ const getAllComments = (request, response, next) => {
         next(err);
     });
 };
+
 
 const postComment = (request, response, next) => {
     const {article_id} = request.params;

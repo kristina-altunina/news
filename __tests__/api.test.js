@@ -346,12 +346,22 @@ describe('DELETE /api/comments/:comment_id', () => {
     });   
 
     it('400: responds with an error message when passed an invalid comment_id', () => {
-        return request(app).delete('/api/comments/hhhhh/')
+        return request(app).delete('/api/comments/hhhhh')
         .expect(400)
         .then((result) => {
             const {body} = result
             expect(result.status).toBe(400)
             expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('404: responds with an error message if the comment does not exist', () => {
+        return request(app).delete('/api/comments/9876')
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
         })
     });
 });
