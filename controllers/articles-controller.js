@@ -26,13 +26,13 @@ const getArticles = (request, response, next) => {
 const patchArticle = (request, response, next) => {
     const {article_id} = request.params;
     const {inc_votes} = request.body;
-    selectArticle(article_id).then((article) => {
-        updateArticle(article.article_id, inc_votes).then((updatedArticle) => {
-            response.status(201).send({article: updatedArticle})
-        })
-        .catch((err) => {
-            next(err);
-        })
+    const promises = [selectArticle(article_id), updateArticle(article_id, inc_votes)];
+
+    Promise.all(promises)
+    .then((resolvedPromises) => {
+        const article = resolvedPromises[0];
+        const updatedArticle = resolvedPromises[1];
+        response.status(201).send({article: updatedArticle})
     })
     .catch((err) => {
         next(err);
