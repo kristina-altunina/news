@@ -1,10 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const { getAllTopics } = require('./controllers/topics-controller');
 const { availableEndpoints } = require('./controllers/endpoint-controller');
 const { getArticle, getArticles, patchArticle } = require('./controllers/articles-controller');
 const { getAllComments, postComment } = require('./controllers/comments-controller');
 const { handle400s } = require('./controllers/error-controller')
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
 
 app.patch('/api/articles/:article_id', patchArticle);
