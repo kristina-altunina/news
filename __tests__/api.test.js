@@ -88,10 +88,10 @@ describe('GET/api/articles/:article_id', () => {
             expect(body.message).toBe('404: Not Found')
         })
     });
- });
+});
 
 
- describe('GET/api/articles', () => {
+describe('GET/api/articles', () => {
     it('200: responds with a status of 200', () => {
         return request(app).get('/api/articles').expect(200);
     });
@@ -339,3 +339,29 @@ describe('PATCH /api/articles/:article_id', () => {
     });
 });
 
+
+describe('DELETE /api/comments/:comment_id', () => {
+    it('204: responds with status 204 and no content', () => {
+        return request(app).delete('/api/comments/1').expect(204)
+    });   
+
+    it('400: responds with an error message when passed an invalid comment_id', () => {
+        return request(app).delete('/api/comments/hhhhh')
+        .expect(400)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(400)
+            expect(body.message).toBe('400: Bad Request')
+        })
+    });
+
+    it('404: responds with an error message if the comment does not exist', () => {
+        return request(app).delete('/api/comments/9876')
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
+        })
+    });
+});

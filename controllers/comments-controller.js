@@ -1,4 +1,4 @@
-const { selectComments, insertComment } = require('../models/comments-model');
+const { selectComments, selectComment, insertComment, selectCommentToDelete } = require('../models/comments-model');
 const { selectArticle } = require('../models/articles-model');
 const { selectUser } = require('../models/users-model');
 
@@ -13,6 +13,7 @@ const getAllComments = (request, response, next) => {
         next(err);
     });
 };
+
 
 const postComment = (request, response, next) => {
     const {article_id} = request.params;
@@ -37,11 +38,20 @@ const postComment = (request, response, next) => {
     });
 }
 
+const deleteComment = (request, response, next) => {
+    const {comment_id} = request.params
+    selectCommentToDelete(comment_id).then(() => {
+        response.status(204).send();  
+    })
+    .catch((err) => {
+        next(err);
+    });
+};
 
 
 
 
-module.exports = { getAllComments, postComment };
+module.exports = { getAllComments, postComment, deleteComment };
 
 
 

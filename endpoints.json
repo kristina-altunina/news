@@ -104,6 +104,10 @@
         }
     },
     "expampleRequest": { "inc_votes": 5 }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a comment with specified comment_id",
+    "queries": []
   }
 }
 }
