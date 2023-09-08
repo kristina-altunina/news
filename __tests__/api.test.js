@@ -33,6 +33,34 @@ describe('GET/api/topics', () => {
     });
 });
 
+describe('GET/api/topics/topic_name', () => {
+    it('200: responds with a status of 200', () => {
+        return request(app).get('/api/topics/cats').expect(200);
+    });
+
+    it('200: returns the topic with properties of slug and description', () => {
+        return request(app)
+        .get('/api/topics/cats')
+        .then((response) => {
+        const {topic} = response.body
+            expect(topic).toHaveProperty('description', expect.any(String));
+            expect(topic).toHaveProperty('slug', expect.any(String));
+            expect(topic.slug).toBe("cats");
+            expect(topic.description).toBe("Not dogs");
+        });
+        });
+    });
+
+    it('404: responds with an error message when passed an topic_name that does not exist', () => {
+        return request(app).get('/api/topics/abc')
+        .expect(404)
+        .then((result) => {
+            const {body} = result
+            expect(result.status).toBe(404)
+            expect(body.message).toBe('404: Not Found')
+        })
+    });
+
 
 describe('GET/api', () => {
     it('200: responds with all endpoints available', () => {

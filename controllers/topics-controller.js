@@ -1,4 +1,5 @@
-const { selectTopics } = require('../models/topics-model');
+const { request } = require('../app');
+const { selectTopics, selectTopic } = require('../models/topics-model');
 
 const getAllTopics = (request, response, next) => {
     selectTopics().then((topics) => {
@@ -10,5 +11,16 @@ const getAllTopics = (request, response, next) => {
     });
 };
 
+const getTopic = (request, response, next) => {
+    const {topic_name} = request.params;
+    selectTopic(topic_name).then((topic) => {
+        response.status(200).send({topic});
+    })
+    .catch((err) => {
+        next(err);
+    });
+};
 
-module.exports = { getAllTopics };
+
+
+module.exports = { getAllTopics, getTopic };

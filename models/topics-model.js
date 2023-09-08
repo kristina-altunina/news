@@ -8,4 +8,17 @@ const selectTopics = () => {
                     })
 };
 
-module.exports = { selectTopics }
+const selectTopic = (topic_name) => {
+    return connection.query(`SELECT slug, description
+                            FROM topics
+                            WHERE slug = $1`, [topic_name])
+                        .then(({rows}) => {
+                            if(rows.length === 0){
+                            return Promise.reject({status: 404}) 
+                            }
+                        return rows[0];
+                        })
+};
+
+module.exports = { selectTopics,  selectTopic}
+

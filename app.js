@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getAllTopics } = require('./controllers/topics-controller');
+const { getAllTopics, getTopic } = require('./controllers/topics-controller');
 const { availableEndpoints } = require('./controllers/endpoint-controller');
 const { getArticle, getArticles, patchArticle } = require('./controllers/articles-controller');
 const { getAllComments, postComment } = require('./controllers/comments-controller');
@@ -15,6 +15,7 @@ app.patch('/api/articles/:article_id', patchArticle);
 app.post('/api/articles/:article_id/comments', postComment);
 app.get('/api/articles/:article_id/comments', getAllComments);
 app.get('/api/articles/:article_id', getArticle);
+app.get('/api/topics/:topic_name', getTopic);
 app.use('/api/articles', getArticles);
 app.use('/api/topics', getAllTopics);
 app.use('/api', availableEndpoints);
